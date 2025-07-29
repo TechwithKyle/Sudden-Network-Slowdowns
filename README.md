@@ -102,26 +102,26 @@ The malware scan produced no results. Out of caution, I kept the device isolated
 ## Relevant MITRE ATT&CK TTPs:
 
 - T1046 – Network Service Scanning
--- Sequential failed connection attempts indicate a port scan (via `portscan.ps1`).
+> Sequential failed connection attempts indicate a port scan (via `portscan.ps1`).
 
 - T1059.001 – Command and Scripting Interpreter: PowerShell > Malicious PowerShell script used to conduct the scan.
 
 - T1071.001 – Application Layer Protocol: Web Protocols *(inferred if script uses web communication)*
--- If `portscan.ps1` involved network enumeration via web or HTTP(S).
+> If `portscan.ps1` involved network enumeration via web or HTTP(S).
 
 - T1204.002 – User Execution: Malicious Script *(if script was manually triggered)* > Could apply if script required user interaction.
 
 - T1078.001 – Valid Accounts: Default Accounts *(inferred from SYSTEM account use)* > Script was launched by SYSTEM, possibly via exploitation or misconfiguration.
 
 - T1562.001 – Impair Defenses: Disable or Modify Tools *(inferred)*
--- SYSTEM-level script execution not set by Admins may imply evasion or tampering with
+> SYSTEM-level script execution not set by Admins may imply evasion or tampering with
 defenses.
 
 - T1105 – Ingress Tool Transfer *(inferred)*
--- If the `portscan.ps1` script was dropped remotely or transferred to the system.
+> If the `portscan.ps1` script was dropped remotely or transferred to the system.
 
 - T1036 – Masquerading *(inferred)*
--- Legitimate-looking PowerShell script (`portscan.ps1`) could be hiding malicious intent.
+> Legitimate-looking PowerShell script (`portscan.ps1`) could be hiding malicious intent.
 
 ## Response Actions:
 
