@@ -22,7 +22,7 @@ some kind of port scanning against hosts in the local network.
 
 ## Timeline Summary and Findings 
 
-### Kylesvm was found failing several connection requests against itself and another host on the same network
+Kylesvm was found failing several connection requests against itself and another host on the same network
 
 **Query used to locate events:**
 
@@ -37,7 +37,7 @@ DeviceNetworkEvents
 
 ---
 
-### After observing failed connection requests from a suspected host (10.0.0.5) in chronological order, I noticed a port scan was taking place due to the sequential order of the ports. There were several port scans being conducted.
+After observing failed connection requests from a suspected host (10.0.0.5) in chronological order, I noticed a port scan was taking place due to the sequential order of the ports. There were several port scans being conducted.
 
 **Query used to locate events:**
 
@@ -53,7 +53,7 @@ let IPInQuestion = "10.0.0.73"; DeviceNetworkEvents
 
 ## Investigation
 
-### I pivoted to the DeviceProcessEvents table to see anything suspicious around the time the port scan started. I noticed a Powershell script named portscan.ps1 launched at 22025-07-06T16:37:50.6462923Z
+I pivoted to the DeviceProcessEvents table to see anything suspicious around the time the port scan started. I noticed a Powershell script named portscan.ps1 launched at 22025-07-06T16:37:50.6462923Z
 
 **Query used to locate events:**
 
@@ -69,7 +69,7 @@ let specificTime = datetime(2025-07-06T16:38:21.0879149Z); DeviceProcessEvents
 
 ---
 
-### I logged into the suspect computer and observed the Powershell script that was used to conduct the port scan.
+I logged into the suspect computer and observed the Powershell script that was used to conduct the port scan.
 
 <img width="737" height="248" alt="image" src="https://github.com/user-attachments/assets/1d54648b-4240-4c5b-a2a3-100ba6b2c709" />
 
@@ -77,7 +77,7 @@ let specificTime = datetime(2025-07-06T16:38:21.0879149Z); DeviceProcessEvents
 
 ## Response
 
-### I observed the portscan script was launched by the SYSTEM account. This is not expected behavior and was not set up by the Admins. So, I isolated the device and ran a malware scan.
+I observed the portscan script was launched by the SYSTEM account. This is not expected behavior and was not set up by the Admins. So, I isolated the device and ran a malware scan.
 
 **Query used to locate events:**
 
@@ -95,32 +95,32 @@ DeviceLogonEvents
  
 ## Summary
 
-### The malware scan produced no results. Out of caution, I kept the device isolated and submitted a ticket for re-imaging.
+The malware scan produced no results. Out of caution, I kept the device isolated and submitted a ticket for re-imaging.
 
 ---
 
 ## Relevant MITRE ATT&CK TTPs:
 
-### - T1046 – Network Service Scanning
+T1046 – Network Service Scanning
 > Sequential failed connection attempts indicate a port scan (via `portscan.ps1`).
 
-### - T1059.001 – Command and Scripting Interpreter: PowerShell > Malicious PowerShell script used to conduct the scan.
+T1059.001 – Command and Scripting Interpreter: PowerShell > Malicious PowerShell script used to conduct the scan.
 
-### - T1071.001 – Application Layer Protocol: Web Protocols *(inferred if script uses web communication)*
+T1071.001 – Application Layer Protocol: Web Protocols *(inferred if script uses web communication)*
 > If `portscan.ps1` involved network enumeration via web or HTTP(S).
 
-### - T1204.002 – User Execution: Malicious Script *(if script was manually triggered)* > Could apply if script required user interaction.
+T1204.002 – User Execution: Malicious Script *(if script was manually triggered)* > Could apply if script required user interaction.
 
-### - T1078.001 – Valid Accounts: Default Accounts *(inferred from SYSTEM account use)* > Script was launched by SYSTEM, possibly via exploitation or misconfiguration.
+T1078.001 – Valid Accounts: Default Accounts *(inferred from SYSTEM account use)* > Script was launched by SYSTEM, possibly via exploitation or misconfiguration.
 
-### - T1562.001 – Impair Defenses: Disable or Modify Tools *(inferred)*
+T1562.001 – Impair Defenses: Disable or Modify Tools *(inferred)*
 > SYSTEM-level script execution not set by Admins may imply evasion or tampering with
 defenses.
 
-### - T1105 – Ingress Tool Transfer *(inferred)*
+T1105 – Ingress Tool Transfer *(inferred)*
 > If the `portscan.ps1` script was dropped remotely or transferred to the system.
 
-### - T1036 – Masquerading *(inferred)*
+T1036 – Masquerading *(inferred)*
 > Legitimate-looking PowerShell script (`portscan.ps1`) could be hiding malicious intent.
 
 ## Response Actions:
